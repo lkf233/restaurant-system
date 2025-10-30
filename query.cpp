@@ -1,0 +1,217 @@
+#include "query.h"
+#include "ui_query.h"
+#include "QFile"
+#include "QMessageBox"
+#include "QTextStream"
+#include "QDebug"
+#include "admitleave.h"
+#include "checkleave.h"
+#include <QPainter>
+#include <QTimer>
+
+QString name1;
+QString time1;
+QString time2;
+QString reason;
+
+void Query::paintEvent(QPaintEvent *event)
+{
+    //创建画家，制定绘画设备
+    QPainter painter(this);
+    //创建QPixmap对象
+    QPixmap pix;
+    //加载图片
+    pix.load(":/b.jpg");
+    //绘制背景图
+    painter.drawPixmap(0,0,this->width(),this->height(),pix);
+
+}
+
+Query::Query(QString name1,QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Query)
+{
+    ui->setupUi(this);
+
+    name = name1;
+
+    set(ui->confirm);
+    set(ui->return_2);
+
+    //配置主场景
+
+    //设置固定大小
+    setFixedSize(750,427);
+
+    //设置图标
+    setWindowIcon(QIcon(":/icon.jpg"));
+    //设置标题
+    setWindowTitle("查询");
+
+
+    this->model=new QStandardItemModel;
+
+    this->model->setHorizontalHeaderItem(0,new QStandardItem("姓名"));
+    this->model->setHorizontalHeaderItem(1,new QStandardItem("离开时间"));
+    this->model->setHorizontalHeaderItem(2,new QStandardItem("返回时间"));
+    this->model->setHorizontalHeaderItem(3,new QStandardItem("原因"));
+
+
+    this->ui->tableView->setModel(model);
+
+    this->ui->tableView->setColumnWidth(0,100);
+    this->ui->tableView->setColumnWidth(1,200);
+    this->ui->tableView->setColumnWidth(2,200);
+    this->ui->tableView->setColumnWidth(3,300);
+
+//    int row=this->ui->tableView->currentIndex().row();
+//    model->removeRow(row);
+//    model->submit();
+
+    if(readfile()==-1)
+    {
+        this->close();
+        QMessageBox::critical(this,"错误","文件读取失败，无法进行查找","确认");
+    }
+
+    connect(ui->confirm,&QPushButton::clicked,[=](){
+
+        on_btn_doquery_clicked();
+
+        });
+
+    connect(ui->return_2,&QPushButton::clicked,[=](){
+
+        //延时进入评论界面
+        QTimer::singleShot(100,this,[=](){
+
+        //自身隐藏
+        this->hide();
+
+        //显示评论界面
+        CheckLeave *checkleave = new CheckLeave(name);
+        checkleave->show();
+
+        });
+
+        });
+}
+
+Query::~Query()
+{
+    delete ui;
+}
+
+void Query::reset()
+{
+    this->model->setHorizontalHeaderItem(0,new QStandardItem("姓名"));
+    this->model->setHorizontalHeaderItem(1,new QStandardItem("离开时间"));
+    this->model->setHorizontalHeaderItem(2,new QStandardItem("返回时间"));
+    this->model->setHorizontalHeaderItem(3,new QStandardItem("原因"));
+
+    this->ui->tableView->setColumnWidth(0,100);
+    this->ui->tableView->setColumnWidth(1,200);
+    this->ui->tableView->setColumnWidth(2,200);
+    this->ui->tableView->setColumnWidth(3,300);
+}
+
+int Query::readfile()
+{
+    stuff_line.clear();
+    QFile file("C:/Users/HUAWEI/Desktop/new/new/leave.txt");
+    if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        return -1;
+    }
+    QTextStream in(&file);
+
+    while(!in.atEnd())
+    {
+        QString line = in.readLine();
+        stuff_line.append(line);
+    }
+    file.close();
+        return 0;
+}
+
+void Query::display(int row, QStringList score_line)
+{
+    int i=0;
+    for (i=0;i<score_line.length();i++)
+    {
+        this->model->setItem(row,i,new QStandardItem(score_line.at(i)));
+    }
+}
+
+void Query::on_btn_doquery_clicked()
+{
+    this->model->clear();
+    reset();
+    readfile();
+    QString infor=this->ui->name->text();
+
+    if (infor.length()<1)
+    {
+            QMessageBox::critical(this,"错误","输入信息错误，请重试！","确认");
+    }
+    else
+    {
+//            qDebug()<<flag;
+            int i=0,row=0;
+            for (i=0;i<stuff_line.length();i++)
+            {
+                QString line=stuff_line.at(i);
+                line=line.trimmed();
+                QStringList linesplit=line.split(" ");
+
+                    if(linesplit.at(0).contains(infor,Qt::CaseSensitive))
+                    {
+                        display(row++, linesplit);
+
+//                        qDebug()<<1;
+
+
+                    }
+
+            }
+    }
+}
+
+void Query::on_tableView_doubleClicked(const QModelIndex &index)
+{
+    AdmitLeave *a = new AdmitLeave(name);
+    int row=this->ui->tableView->currentIndex().row();
+    name1=model->data(model->index(row,0)).toString();
+    time1=model->data(model->index(row,1)).toString();
+    time2=model->data(model->index(row,2)).toString();
+    reason=model->data(model->index(row,3)).toString();
+//    sum1=model->data(model->index(row,6)).toString();
+    a->show();
+}
+
+void Query::set(QPushButton* m)
+{
+    m->setStyleSheet(
+                        //正常状态样式
+                        "QPushButton{"
+                        "background-color:rgba(100,225,100,30);"//背景色（也可以设置图片）
+                        "border-style:outset;"                  //边框样式（inset/outset）
+                        "border-width:4px;"                     //边框宽度像素
+                        "border-radius:10px;"                   //边框圆角半径像素
+                        "border-color:rgba(255,255,255,30);"    //边框颜色
+                        "padding:6px;"                          //填衬
+                        "}"
+                        //鼠标按下样式
+                        "QPushButton:pressed{"
+                        "background-color:rgba(100,255,100,200);"
+                        "border-color:rgba(255,255,255,30);"
+                        "border-style:inset;"
+                        "color:rgba(0,0,0,100);"
+                        "}"
+                        //鼠标悬停样式
+                        "QPushButton:hover{"
+                        "background-color:rgba(100,255,100,100);"
+                        "border-color:rgba(255,255,255,200);"
+                        "color:rgba(0,0,0,200);"
+                        "}");
+}
