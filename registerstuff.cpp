@@ -120,13 +120,13 @@ RegisterStuff::RegisterStuff(QWidget *parent) :
         {
 
         //检测账号是否有被注册
-            QSqlDatabase employee = QSqlDatabase::addDatabase("QODBC");
-             QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-             employee.setHostName("192.168.56.102");//你的IP地址
-             employee.setDatabaseName(dsn);
-             employee.setUserName("my_root"); //用户名
-             employee.setPassword("my_root@123");//密码
-             employee.setPort(26000); //opengauss端口号为26000
+            QSqlDatabase employee;
+            if(QSqlDatabase::contains("qt_sql_default_connection"))
+                employee = QSqlDatabase::database("qt_sql_default_connection");
+            else
+                employee = QSqlDatabase::addDatabase("QSQLITE");
+
+            employee.setDatabaseName("test.db");
             if(employee.open()){
                 QSqlQuery sql_query(employee);
 
@@ -219,13 +219,13 @@ RegisterStuff::RegisterStuff(QWidget *parent) :
                 }
 
                     }
-            QSqlDatabase employeewt = QSqlDatabase::addDatabase("QODBC");
-              dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-             employeewt.setHostName("192.168.56.102");//你的IP地址
-             employeewt.setDatabaseName(dsn);
-             employeewt.setUserName("my_root"); //用户名
-             employeewt.setPassword("my_root@123");//密码
-             employeewt.setPort(26000); //opengauss端口号为26000
+            QSqlDatabase employeewt;
+            if(QSqlDatabase::contains("qt_sql_default_connection"))
+                employeewt = QSqlDatabase::database("qt_sql_default_connection");
+            else
+                employeewt = QSqlDatabase::addDatabase("QSQLITE");
+
+            employeewt.setDatabaseName("workTime.db");
 
 
                 if(employeewt.open()){

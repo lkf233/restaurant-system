@@ -3,6 +3,7 @@
 #include "servant_open.h"
 #include "widget1.h"
 #include "administratorhomepage.h"
+#include "stockwidget.h"
 #include <QTimer>
 #include <QString>
 #include <QMessageBox>
@@ -181,13 +182,8 @@ void check_table::setTablet(Table table)
 
 void check_table::setTable(int num)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("table.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -238,6 +234,7 @@ void check_table::setTable(int num)
                  }
              }
          }
+         db.close();
          setTablet(tables[num-1]);//转去显示
 }
 
@@ -678,17 +675,16 @@ void check_table::on_pushButton_22_clicked()
     QString str = ui->label_5->text();
     QFont ft;
     int number = str.toInt();//获得当前桌号
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("table.db");
+        if( !db.open())
+        {
+          qDebug()<<"Connection fails.";
+        }
 
 
     if(tables[number-1].getReservationStatus())//预约状态中,转成取消预约
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
         if( db.open())
          {
              qDebug()<<"Connection success.";
@@ -721,13 +717,6 @@ void check_table::on_pushButton_22_clicked()
         }
         else//未落座，可预约
         {
-            QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-             QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-             db.setHostName("192.168.56.102");//你的IP地址
-             db.setDatabaseName(dsn);
-             db.setUserName("my_root"); //用户名
-             db.setPassword("my_root@123");//密码
-             db.setPort(26000); //opengauss端口号为26000
             if( db.open())
              {
                  qDebug()<<"Connection success.";
@@ -757,6 +746,7 @@ void check_table::on_pushButton_22_clicked()
         }
 
     }
+    db.close();
 }
 
 //落座、离座按钮
@@ -766,16 +756,15 @@ void check_table::on_pushButton_23_clicked()
     QString str = ui->label_5->text();
     int number = str.toInt();//获得当前桌号
 
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("table.db");
+        if( !db.open())
+        {
+          qDebug()<<"Connection fails.";
+        }
 
     if(tables[number-1].getUsageStatus())//已落座，准备离座
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
         if( db.open())
          {
              qDebug()<<"Connection success.";
@@ -795,13 +784,6 @@ void check_table::on_pushButton_23_clicked()
     }
     else//可落座，准备落座
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
         if( db.open())
          {
              qDebug()<<"Connection success.";
@@ -826,6 +808,7 @@ void check_table::on_pushButton_23_clicked()
         ui->label_3->setText("未预约");
         ui->lcdNumber->display("0");
     }
+    db.close();
 }
 
 //刷新

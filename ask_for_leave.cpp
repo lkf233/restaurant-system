@@ -1,6 +1,7 @@
 #include "ask_for_leave.h"
 #include "ui_ask_for_leave.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include <QTimer>
@@ -98,6 +99,13 @@ void Ask_for_leave::on_pushButton_clicked()
                 chef->show();
                 break;}
 
+           case 3 ://进入此页面的身份是仓管
+            {
+                Stockwidget *stock=new Stockwidget(name);
+                stock->show();
+                 this->hide();
+                break;
+            }
             case 4 ://进入此页面的身份是管理员
             {
                 administratorHomePage *manager = new administratorHomePage(name);
@@ -117,7 +125,7 @@ void Ask_for_leave::on_pushButton_clicked()
 void Ask_for_leave::check_leaveStatus()
 {
     QFile file;
-    file.setFileName("C:/Users/HUAWEI/Desktop/new/new/leave.txt");
+    file.setFileName("D:/Qt profile/servant/leave.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     return;
     QTextStream in(&file);
@@ -176,7 +184,7 @@ void Ask_for_leave::on_pushButton_2_clicked()
         QString res ="";
 
     //写入文件
-        file.setFileName("C:/Users/HUAWEI/Desktop/new/new/leave.txt");//转移后这个路径记得要改
+        file.setFileName("D:/Qt profile/new/leave.txt");//转移后这个路径记得要改
         if(file.open(QIODevice::Text | QIODevice::ReadWrite | QIODevice::Append)){
             QTextStream stream(&file);
             QString leavetimestr = leavetime.toString("yyyy-MM-dd-hh:mm:ss");

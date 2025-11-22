@@ -5,6 +5,7 @@
 #include "paymentscene.h"
 #include"viewcomment.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include "menuscene.h"
@@ -46,14 +47,13 @@ void MenuScene::paintEvent(QPaintEvent *)
 
 void MenuScene::connectDB()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-        QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-        db.setHostName("192.168.56.102");//你的IP地址
-        db.setDatabaseName(dsn);
-        db.setUserName("my_root"); //用户名
-        db.setPassword("my_root@123");//密码
-        db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db ;
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+      db = QSqlDatabase::database("qt_sql_default_connection");
+    else
+      db = QSqlDatabase::addDatabase("QSQLITE");
 
+            db.setDatabaseName("test.db");
             if( !db.open())
             {
               qDebug()<<"Connection fails.";
@@ -184,8 +184,8 @@ void MenuScene::search()
          query.first();//指向第一条记录
 
          //设置表头
-         ui->menuList->setHorizontalHeaderItem(0,new QTableWidgetItem("菜品名(中文)"));
-         ui->menuList->setHorizontalHeaderItem(1,new QTableWidgetItem("菜品名(英文)"));
+         ui->menuList->setHorizontalHeaderItem(0,new QTableWidgetItem("菜品名(英文)"));
+         ui->menuList->setHorizontalHeaderItem(1,new QTableWidgetItem("菜品名(中文)"));
          ui->menuList->setHorizontalHeaderItem(2,new QTableWidgetItem("食材"));
          ui->menuList->setHorizontalHeaderItem(3,new QTableWidgetItem("价格"));
          ui->menuList->setHorizontalHeaderItem(4,new QTableWidgetItem("风格"));
@@ -389,6 +389,13 @@ void MenuScene::on_pushButton_clicked()
         chef->show();
         break;}
 
+   case 3 ://进入此页面的身份是仓管
+    {
+        Stockwidget *stock=new Stockwidget(name);
+        stock->show();
+         this->hide();
+        break;
+    }
     case 4 ://进入此页面的身份是管理员
     {
         administratorHomePage *manager = new administratorHomePage(name);

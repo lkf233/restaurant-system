@@ -3,6 +3,7 @@
 #include "servant_open.h"
 #include "widget1.h"
 #include "administratorhomepage.h"
+#include "stockwidget.h"
 #include "employee.h"
 #include "servant.h"
 #include "manager.h"
@@ -108,6 +109,13 @@ void Check_Salary::on_pushButton_clicked()
                     chef->show();
                     break;}
 
+               case 3 ://进入此页面的身份是仓管
+                {
+                    Stockwidget *stock=new Stockwidget(name);
+                    stock->show();
+                     this->hide();
+                    break;
+                }
                 case 4 ://进入此页面的身份是管理员
                 {
                     administratorHomePage *manager = new administratorHomePage(name);
@@ -134,6 +142,10 @@ void Check_Salary::show_salary()
     else if(job == 2)//这个人是厨师
     {
         employee = new chef(name);
+    }
+    else if(job == 3)//这个人是仓管
+    {
+        employee = new warehouse(name);
     }
     else if(job == 4)//这个人是管理员
     {
@@ -209,13 +221,8 @@ void Check_Salary::show_salary()
 QString Check_Salary::getBasicSalary()
 {
     QString basic_salary;
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("test.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -237,6 +244,7 @@ QString Check_Salary::getBasicSalary()
                  }
              }
          }
+         db.close();
          return basic_salary;
 }
 
@@ -244,13 +252,8 @@ QString Check_Salary::getBasicSalary()
 QTime Check_Salary::getMonthWorkTime()
 {
     QTime monthWorkTime;
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("workTime.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -270,19 +273,15 @@ QTime Check_Salary::getMonthWorkTime()
 
              }
          }
+    db.close();
     return monthWorkTime;
 }
 //获得月工作时长奖金
 qint64 Check_Salary::getMonthWorkSalary()
 {
     qint64 monthTime = 0;
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("workTime.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -301,6 +300,7 @@ qint64 Check_Salary::getMonthWorkSalary()
 
              }
          }
+    db.close();
 
     //将毫秒数转回QTime的计算基数
     int ss = 1000;

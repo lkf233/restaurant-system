@@ -4,6 +4,7 @@
 #include "widget1.h"
 #include "modifymenu.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include <QApplication>
@@ -58,8 +59,8 @@ void OperationOnDishes::onShowDb()
       query.first();//指向第一条记录
 
       //设置表头
-      ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("菜品名(中文)"));
-      ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem("菜品名(英文)"));
+      ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("菜品名(英文)"));
+      ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem("菜品名(中文)"));
       ui->tableWidget->setHorizontalHeaderItem(2,new QTableWidgetItem("食材"));
       ui->tableWidget->setHorizontalHeaderItem(3,new QTableWidgetItem("价格"));
       ui->tableWidget->setHorizontalHeaderItem(4,new QTableWidgetItem("风格"));
@@ -98,7 +99,13 @@ void OperationOnDishes::on_pushButton_3_clicked()
                 chef->show();
                 break;}
 
-
+           case 3 ://进入此页面的身份是仓管
+            {
+                Stockwidget *stock=new Stockwidget(name);
+                stock->show();
+                 this->hide();
+                break;
+            }
             case 4 ://进入此页面的身份是管理员
             {
                 administratorHomePage *manager = new administratorHomePage(name);
@@ -369,7 +376,7 @@ void OperationOnDishes::on_pushButton_4_clicked()//实现模糊查询
     QString text2=ui->comboBox->currentText();
 
     QString sql; int nColumn, nRow;
-    sql=QString("select * FROM menu WHERE menuInChinese LIKE '%%8%' AND style='%6'"
+    sql=QString("select * FROM menu WHERE menuInChinese LIKE '%8' AND style='%6'"
                 ).arg(text2).arg(text);
 QSqlQuery query;
     bool ok=query.exec(sql);
@@ -377,9 +384,9 @@ QSqlQuery query;
     if(ok)
     {clearTableData();
              if(text2!="默认")
-      {  query.exec(QString("select * FROM menu WHERE menuInChinese LIKE '%%8%' AND style='%6'"
+      {  query.exec(QString("select * FROM menu WHERE menuInChinese LIKE '%8%' AND style='%6'"
                            ).arg(text2).arg(text));}
-             else query.exec(QString("select * FROM menu WHERE menuInChinese LIKE '%%8%'"
+             else query.exec(QString("select * FROM menu WHERE menuInChinese LIKE '%8%'"
                                      ).arg(text));
         query.last();//指向最后一条记录 打印行数等于总行数加一
         nRow = query.at() + 1;
@@ -392,8 +399,8 @@ QSqlQuery query;
          query.first();//指向第一条记录
 
          //设置表头
-         ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("菜品名(中文)"));
-         ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem("菜品名(英文)"));
+         ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem("菜品名(英文)"));
+         ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem("菜品名(中文)"));
          ui->tableWidget->setHorizontalHeaderItem(2,new QTableWidgetItem("食材"));
          ui->tableWidget->setHorizontalHeaderItem(3,new QTableWidgetItem("价格"));
          ui->tableWidget->setHorizontalHeaderItem(4,new QTableWidgetItem("风格"));
@@ -428,11 +435,22 @@ void OperationOnDishes::set_job(QString job1)
     {
         job = 2;
     }
-
+    //进入此页面的身份是仓管
+    else if(job1 == "warehouse")//查看一下仓管到底叫啥
+    {
+        job = 3;
+    }
     //进入此页面的身份是管理员
     else if(job1 == "manager")
     {
         job = 4;
     }
+    else
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::critical(this, tr("QMessageBox::critical()"),
+                                            "无效的职位",
+                                            QMessageBox::Abort | QMessageBox::Retry | QMessageBox::Ignore);
 
+    }
 }

@@ -2,6 +2,7 @@
 #include "ui_checksaleamount.h"
 #include "selectway.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include <QApplication>

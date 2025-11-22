@@ -192,15 +192,13 @@ void CheckComments_::onBtnRefresh()
 void CheckComments_::initDB()
 {
 
+    QSqlDatabase comments;
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+        comments = QSqlDatabase::database("qt_sql_default_connection");
+    else
+        comments= QSqlDatabase::addDatabase("QSQLITE");
 
-
-        QSqlDatabase comments = QSqlDatabase::addDatabase("QODBC");
-        QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-        comments.setHostName("192.168.56.102");//你的IP地址
-        comments.setDatabaseName(dsn);
-        comments.setUserName("my_root"); //用户名
-        comments.setPassword("my_root@123");//密码
-        comments.setPort(26000); //opengauss端口号为26000
+    comments.setDatabaseName("test.db");
 
     bool ok = comments.open();
     if(ok)

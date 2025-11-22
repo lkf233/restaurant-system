@@ -3,6 +3,7 @@
 #include "checksaleamount.h"
 #include "checksaleamount_day.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include <QApplication>
@@ -58,13 +59,24 @@ void SelectWay::set_job(QString job1)
     {
         job = 2;
     }
-
+    //进入此页面的身份是仓管
+    else if(job1 == "warehouse")//查看一下仓管到底叫啥
+    {
+        job = 3;
+    }
     //进入此页面的身份是管理员
     else if(job1 == "manager")
     {
         job = 4;
     }
+    else
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::critical(this, tr("QMessageBox::critical()"),
+                                            "invalid job",
+                                            QMessageBox::Abort | QMessageBox::Retry | QMessageBox::Ignore);
 
+    }
 }
 
 void SelectWay::on_pushButton_clicked()//按月查询
@@ -76,6 +88,8 @@ void SelectWay::on_pushButton_clicked()//按月查询
         jobStr = "servant";
     else if(job == 2)
         jobStr = "chef";
+    else if(job == 3)
+        jobStr = "warehouse";
     else if(job == 4)
         jobStr = "manager";
     else if(job == 5)
@@ -123,6 +137,13 @@ void SelectWay::on_pushButton_3_clicked()
                 chef->show();
                 break;}
 
+           case 3 ://进入此页面的身份是仓管
+            {
+                Stockwidget *stock=new Stockwidget(name);
+                stock->show();
+                 this->hide();
+                break;
+            }
             case 4 ://进入此页面的身份是管理员
             {
                 administratorHomePage *manager = new administratorHomePage(name);

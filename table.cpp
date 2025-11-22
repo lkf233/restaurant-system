@@ -33,14 +33,8 @@ void Table::setReservationTime()
 }
 QTime Table::getRestReservationTime()
 {
-
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("table.db");
     QTime now = QTime::currentTime();
     if( !db.open())
       {
@@ -59,13 +53,6 @@ QTime Table::getRestReservationTime()
 
     if(ms >= 3600000)//预约已超过一小时，即将解除预约
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
         if( db.open())
              {
                  qDebug()<<"Connection success.";
@@ -80,6 +67,7 @@ QTime Table::getRestReservationTime()
                      qDebug()<<"update reservation_time=0 success";
                  }
              }
+        db.close();
         day = 0;
         hour = 0;
         minute = 0;

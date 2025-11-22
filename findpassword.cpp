@@ -89,13 +89,12 @@ FindPassword::FindPassword(QWidget *parent) :
         //检测生日是否正确
             else{
                 //检测账号是否有被注册
-                QSqlDatabase vip = QSqlDatabase::addDatabase("QODBC");
-                 QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-                 vip.setHostName("192.168.56.102");//你的IP地址
-                 vip.setDatabaseName(dsn);
-                 vip.setUserName("my_root"); //用户名
-                 vip.setPassword("my_root@123");//密码
-                 vip.setPort(26000); //opengauss端口号为26000
+                            QSqlDatabase vip;
+                            if(QSqlDatabase::contains("qt_sql_default_connection"))
+                                vip = QSqlDatabase::database("qt_sql_default_connection");
+                            else
+                                vip = QSqlDatabase::addDatabase("QSQLITE");
+                            vip.setDatabaseName("test.db");
                             if(vip.open()){
                                 QSqlQuery sql_query(vip);
                                 QString ID = ui->cinaccount_id->text();

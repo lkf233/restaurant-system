@@ -34,19 +34,6 @@
        <widget class="QWidget" name="widget" native="true">
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QPushButton" name="pushButton_9">
-           <property name="font">
-            <font>
-             <family>微软雅黑 Light</family>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>打卡上下班</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="pushButton">
            <property name="font">
             <font>
@@ -95,6 +82,19 @@
            </property>
            <property name="text">
             <string>查看薪水</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_11">
+           <property name="font">
+            <font>
+             <family>微软雅黑 Light</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>管理食材数量</string>
            </property>
           </widget>
          </item>
@@ -166,6 +166,19 @@
            </property>
            <property name="text">
             <string>管理桌位</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_9">
+           <property name="font">
+            <font>
+             <family>微软雅黑 Light</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>打卡上下班</string>
            </property>
           </widget>
          </item>

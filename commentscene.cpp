@@ -5,6 +5,7 @@
 #include <QSqlError>
 #include "customerlogin.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 

@@ -2,6 +2,7 @@
 #include "ui_checksaleamount_day.h"
 #include "selectway.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include <QApplication>
@@ -56,6 +57,8 @@ void checkSaleAmount_day::on_pushButton_2_clicked()
         jobStr = "servant";
     else if(job == 2)
         jobStr = "chef";
+    else if(job == 3)
+        jobStr = "warehouse";
     else if(job == 4)
         jobStr = "manager";
     else if(job == 5)
@@ -220,6 +223,11 @@ void checkSaleAmount_day::set_job(QString job1)
     else if(job1 == "chef")
     {
         job = 2;
+    }
+    //进入此页面的身份是仓管
+    else if(job1 == "warehouse")//查看一下仓管到底叫啥
+    {
+        job = 3;
     }
     //进入此页面的身份是管理员
     else if(job1 == "manager")

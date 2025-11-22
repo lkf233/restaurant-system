@@ -2,6 +2,7 @@
 #include "ui_clock_in_out.h"
 #include "widget1.h"
 #include "administratorhomepage.h"
+#include "stockwidget.h"
 #include "servant_open.h"
 #include <QTimer>
 #include <QString>
@@ -115,6 +116,14 @@ void Clock_in_out::on_pushButton_2_clicked()
                    { Widget1 *chef = new Widget1(name);
                     chef->show();
                     break;}
+
+               case 3 ://进入此页面的身份是仓管
+                {
+                    Stockwidget *stock=new Stockwidget(name);
+                    stock->show();
+                     this->hide();
+                    break;
+                }
                 case 4 ://进入此页面的身份是管理员
                 {
                     administratorHomePage *manager = new administratorHomePage(name);
@@ -146,13 +155,8 @@ void Clock_in_out::on_pushButton_clicked()
         ui->lcdNumber_2->display("0");
 
         //修改数据库中的本次上班开始时间为0
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+            db.setDatabaseName("workTime.db");
             if( !db.open())
             {
               qDebug()<<"Connection fails.";
@@ -175,6 +179,7 @@ void Clock_in_out::on_pushButton_clicked()
                      qDebug()<<"update refreshTime successfully";
                  }
              }
+             db.close();
     }
     else//准备签到
     {
@@ -187,13 +192,8 @@ void Clock_in_out::on_pushButton_clicked()
 
         //设置数据库中的本次上班开始时间
         QString inTimestr = QTime::currentTime().toString("hh::mm::ss");
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+            db.setDatabaseName("workTime.db");
             if( !db.open())
             {
               qDebug()<<"Connection fails.";
@@ -216,6 +216,7 @@ void Clock_in_out::on_pushButton_clicked()
                      qDebug()<<"set workBool to be true";
                  }
              }
+        db.close();
 
     }
 
@@ -227,19 +228,18 @@ void Clock_in_out::onTimeOut()
     ft.setPointSize(16);//字号
     ft.setBold(75);//粗体
     ui->label->setFont(ft);//设置字体
-
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("workTime.db");
+        if( !db.open())
+        {
+          qDebug()<<"Connection fails.";
+        }
     if(check_in_out)//上班中//需要简化计算
     {
         ui->pushButton->setText("签退");
         ui->label->setAlignment(Qt::AlignHCenter);
         ui->label->setText("上班中");
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
+
         //打开数据库获得本次上班的开始时间和本日工作总时长
         if( db.open())
              {
@@ -320,13 +320,6 @@ void Clock_in_out::onTimeOut()
     }
     else//下班中
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
         if( db.open())
              {
                  qDebug()<<"Connection success.";
@@ -352,6 +345,7 @@ void Clock_in_out::onTimeOut()
         ui->label->setAlignment(Qt::AlignHCenter);
         ui->label->setText("下班中");
     }
+    db.close();
 
 }
 
@@ -364,14 +358,8 @@ void Clock_in_out::on_pushButton_3_clicked()
 //从数据库中获得当前员工的上班状态并设置
 void Clock_in_out::getCheck_in_out()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
-
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("workTime.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -424,13 +412,8 @@ void Clock_in_out::on_pushButton_4_clicked()
    }
    else
    {
-       QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-        QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-        db.setHostName("192.168.56.102");//你的IP地址
-        db.setDatabaseName(dsn);
-        db.setUserName("my_root"); //用户名
-        db.setPassword("my_root@123");//密码
-        db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("workTime.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -468,6 +451,7 @@ void Clock_in_out::on_pushButton_4_clicked()
              }
 
          }
+    db.close();
     ui->lcdNumber->display("--：--：--");
    }
 }

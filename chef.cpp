@@ -27,14 +27,9 @@ int chef::getMonthlySalary()
     int month = date.month();
     int sales = 0;
     QString basic_salary;
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
 
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("test.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -57,6 +52,7 @@ int chef::getMonthlySalary()
 
              }
          }
+         db.close();
      double rate = 0.1;//厨师的月销量奖金率
      int saleSalary = rate * sales;
      return saleSalary;

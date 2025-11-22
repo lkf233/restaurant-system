@@ -1,6 +1,7 @@
 #include "viewcomment.h"
 #include "ui_viewcomment.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include "servant_open.h"
 #include "menuscene.h"
@@ -224,6 +225,14 @@ void ViewComment::on_pushButton_clicked()
                { Widget1 *chef = new Widget1(name);
                 chef->show();
                 break;}
+
+           case 3 ://进入此页面的身份是仓管
+            {
+                Stockwidget *stock=new Stockwidget(name);
+                stock->show();
+                 this->hide();
+                break;
+            }
             case 4 ://进入此页面的身份是管理员
             {
                 administratorHomePage *manager = new administratorHomePage(name);

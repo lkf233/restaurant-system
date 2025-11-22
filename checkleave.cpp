@@ -131,7 +131,7 @@ void CheckLeave::reset()
 int CheckLeave::readfile()
 {
     stuff_line.clear();
-    QFile file("C:/Users/HUAWEI/Desktop/new/new/leave.txt");
+    QFile file("D:/Qt profile/new/leave.txt");
     if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
         return -1;

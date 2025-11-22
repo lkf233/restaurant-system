@@ -2,6 +2,7 @@
 #include "ui_stufflogin.h"
 #include "servant_open.h"
 #include "widget1.h"
+#include "stockwidget.h"
 #include "administratorhomepage.h"
 #include <QIcon>
 #include "loginchooseidentity.h"
@@ -107,14 +108,12 @@ StuffLogin::StuffLogin(QWidget *parent) :
         {
 
         //检测账号是否有被注册
-            QSqlDatabase employee = QSqlDatabase::addDatabase("QODBC");
-                QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-                employee.setHostName("192.168.56.102");//你的IP地址
-                employee.setDatabaseName(dsn);
-                employee.setUserName("my_root"); //用户名
-                employee.setPassword("my_root@123");//密码
-                employee.setPort(26000); //opengauss端口号为26000
-
+            QSqlDatabase employee;
+            if(QSqlDatabase::contains("qt_sql_default_connection"))
+                employee = QSqlDatabase::database("qt_sql_default_connection");
+            else
+                employee = QSqlDatabase::addDatabase("QSQLITE");
+            employee.setDatabaseName("test.db");
             if(!employee.open()) qDebug()<<"hello";
             if(employee.open()){
                 QSqlQuery sql_query(employee);
@@ -206,6 +205,22 @@ StuffLogin::StuffLogin(QWidget *parent) :
 
                 });
             }
+
+            if(job=="warehouse stuff")
+            {
+                //延时进入注册界面
+                QTimer::singleShot(100,this,[=](){
+                //自身隐藏
+                this->hide();
+                //显示注册界面
+                Stockwidget *aph = new Stockwidget(fn);
+
+                aph->show();
+
+                });
+            }
+
+
 
         }
 

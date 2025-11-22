@@ -3,6 +3,7 @@
 #include "servant_open.h"
 #include "widget1.h"
 #include "administratorhomepage.h"
+#include "stockwidget.h"
 #include <QTimer>
 #include <QString>
 #include <QDebug>
@@ -100,6 +101,13 @@ void Change_Password::on_pushButton_2_clicked()
                     chef->show();
                     break;}
 
+               case 3 ://进入此页面的身份是仓管
+                {
+                    Stockwidget *stock=new Stockwidget(name);
+                    stock->show();
+                     this->hide();
+                    break;
+                }
                 case 4 ://进入此页面的身份是管理员
                 {
                     administratorHomePage *manager = new administratorHomePage(name);
@@ -125,13 +133,8 @@ void Change_Password::on_pushButton_3_clicked()
     if(QString::compare(newpassword,newpassword_2,Qt::CaseSensitive) == 0)//两次输入的密码相同
     {
 
-        QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-         QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-         db.setHostName("192.168.56.102");//你的IP地址
-         db.setDatabaseName(dsn);
-         db.setUserName("my_root"); //用户名
-         db.setPassword("my_root@123");//密码
-         db.setPort(26000); //opengauss端口号为26000
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+            db.setDatabaseName("test.db");
             if( !db.open())
             {
               qDebug()<<"Connection fails.";
@@ -156,6 +159,7 @@ void Change_Password::on_pushButton_3_clicked()
                      ui->label_6->setText("修改失败！"+q.lastError().text());
                  }
              }
+             db.close();
     }
     else
     {
@@ -183,13 +187,8 @@ void Change_Password::on_pushButton_clicked()
 
     id = ui->lineEdit->text();
     password = ui->lineEdit_2->text();
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-     QString dsn = QString::fromLocal8Bit("restaurant");//你配置的Data Source
-     db.setHostName("192.168.56.102");//你的IP地址
-     db.setDatabaseName(dsn);
-     db.setUserName("my_root"); //用户名
-     db.setPassword("my_root@123");//密码
-     db.setPort(26000); //opengauss端口号为26000
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("test.db");
         if( !db.open())
         {
           qDebug()<<"Connection fails.";
@@ -223,6 +222,7 @@ void Change_Password::on_pushButton_clicked()
                  }
              }
          }
+         db.close();
 }
 
 void Change_Password::setBtn()

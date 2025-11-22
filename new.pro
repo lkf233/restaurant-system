@@ -23,9 +23,12 @@ SOURCES += \
     ask_for_leave.cpp \
     button.cpp \
     change_password.cpp \
+    changefoodamount.cpp \
+    changefoodrest.cpp \
     check_salary.cpp \
     check_table.cpp \
     checkcomments_.cpp \
+    checkfoodrest.cpp \
     checkleave.cpp \
     checksaleamount.cpp \
     checksaleamount_day.cpp \
@@ -53,9 +56,11 @@ SOURCES += \
     servant_open.cpp \
     shoppingbutton.cpp \
     shoppingscene.cpp \
+    stockwidget.cpp \
     stufflogin.cpp \
     table.cpp \
     viewcomment.cpp \
+    warehouse.cpp \
     widget1.cpp
 
 HEADERS += \
@@ -66,9 +71,12 @@ HEADERS += \
     ask_for_leave.h \
     button.h \
     change_password.h \
+    changefoodamount.h \
+    changefoodrest.h \
     check_salary.h \
     check_table.h \
     checkcomments_.h \
+    checkfoodrest.h \
     checkleave.h \
     checksaleamount.h \
     checksaleamount_day.h \
@@ -95,9 +103,11 @@ HEADERS += \
     servant_open.h \
     shoppingbutton.h \
     shoppingscene.h \
+    stockwidget.h \
     stufflogin.h \
     table.h \
     viewcomment.h \
+    warehouse.h \
     widget1.h
 
 FORMS += \
@@ -109,9 +119,12 @@ FORMS += \
     aftercomment.ui \
     ask_for_leave.ui \
     change_password.ui \
+    changefoodamount.ui \
+    changefoodrest.ui \
     check_salary.ui \
     check_table.ui \
     checkcomments_.ui \
+    checkfoodrest.ui \
     checkleave.ui \
     checksaleamount.ui \
     checksaleamount_day.ui \
@@ -132,6 +145,7 @@ FORMS += \
     selectway.ui \
     servant_open.ui \
     shoppingscene.ui \
+    stockwidget.ui \
     stufflogin.ui \
     viewcomment.ui \
     widget1.ui

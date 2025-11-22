@@ -13,6 +13,7 @@
 #include "ask_for_leave.h"
 #include "clock_in_out.h"
 #include "check_table.h"
+#include "changefoodamount.h"
 #include <QIcon>
 #include <QTimer>
 #include <QPainter>
@@ -50,7 +51,7 @@ administratorHomePage::administratorHomePage(QString name1,QWidget *parent) :
     set(ui->pushButton_8);
     set(ui->pushButton_9);
     set(ui->pushButton_10);
-
+    set(ui->pushButton_11);
 
 
     //配置主场景
@@ -251,17 +252,17 @@ void administratorHomePage::setName(QString name1)
 //进入change food amount界面
 void administratorHomePage::on_pushButton_11_clicked()
 {
-//    //延时进入界面
-//    QTimer::singleShot(200,this,[=](){
-//    //自身隐藏
-//    this->hide();
-//    //显示change food amount界面
-//    changeFoodAmount *changeFood = new changeFoodAmount(name);
-//    changeFood->set_job("manager");
-//    changeFood->show();
+    //延时进入界面
+    QTimer::singleShot(200,this,[=](){
+    //自身隐藏
+    this->hide();
+    //显示change food amount界面
+    changeFoodAmount *changeFood = new changeFoodAmount(name);
+    changeFood->set_job("manager");
+    changeFood->show();
 
 
-//    });
+    });
 }
 
 void administratorHomePage::on_pushButton_clicked()
